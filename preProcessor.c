@@ -1,25 +1,9 @@
 #include<stdio.h>
 #include<string.h>
-main(int argc ,char **argv)
+void remCmnt(FILE *fp,FILE *fp1)
 {
-    FILE *fp,*fp1;
-    char d[20],buff[200],buff1[200],*in,*inf;
-    int i,pos,flag;
-    for(i=0;i<strlen(argv[1]) && argv[1][i]!='.';i++)
-    {
-        d[i]=argv[1][i];
-    }
-    d[i++]='.';
-    d[i++]='i';
-    d[i]='\0';
-    //fgjjkj
-    fp=fopen(argv[1],"r");
-    if(fp==NULL)
-    {
-        printf("no file found\n");
-        return;
-    }
-    fp1=fopen(d,"w");
+    char buff[200],buff1[200],*in,*inf;
+    int i,pos;
     while(fgets(buff,200,fp))
     {
         //l=strlen(buff);
@@ -51,6 +35,30 @@ main(int argc ,char **argv)
         }
         fputs(buff,fp1); 
     }
+    return;
+}
+
+main(int argc ,char **argv)
+{
+    FILE *fp,*fp1;
+    char d[20];
+    int i;
+    for(i=0;i<strlen(argv[1]) && argv[1][i]!='.';i++)
+    {
+        d[i]=argv[1][i];
+    }
+    d[i++]='.';
+    d[i++]='i';
+    d[i]='\0';
+    fp=fopen(argv[1],"r");
+    if(fp==NULL)
+    {
+        printf("no file found\n");
+        return;
+    }
+    fp1=fopen(d,"w");
+    remCmnt(fp,fp1);
+
 fclose(fp1);
 fclose(fp);
 }
