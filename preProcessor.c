@@ -27,42 +27,29 @@ main(int argc ,char **argv)
         if(inf=strstr(buff,"//"))
         {
             pos=inf-in;
-          
             buff[pos]='\n';
             buff[pos+1]='\0';
         }
         in=buff;
         if(inf=strstr(buff,"/*"))
         {
-            pos=inf-in;
-              
+            pos=inf-in;  
             if(strstr(buff,"*/"));
             else
             while(1)
             {   
                if(fgets(buff1,200,fp))
                {
-              if(strstr(buff1,"*/"))
-              {flag=1;
-              break;
-              }
-            }
-            else
-
-            {
-                flag=0;
-                break;
-            }
+                    if(strstr(buff1,"*/"))
+                    break;
+               }
+              else
+                  break;
             }
             buff[pos]='\n';
             buff[pos+1]='\0';
         }
-        fputs(buff,fp1);
-        if(flag==0)
-        {
-            printf("end comment not found\n");
-            return;
-        }
+        fputs(buff,fp1); 
     }
 fclose(fp1);
 fclose(fp);
