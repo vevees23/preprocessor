@@ -1,9 +1,21 @@
 #include<stdio.h>
 #include<string.h>
+void expandHeader(FILE *fp1,char *p)
+{
+    char dir[4][50]={"/usr/include/"},buf1[300];
+    FILE *fph;
+    strcat(dir[0],p);
+    fph=fopen(dir[0],"r");
+    while(fgets(buf1,200,fph))
+    {
+        fputs(buf1,fp1);
+    }
+}
 void remCmnt(FILE *fp,FILE *fp1)
 {
     char buff[200],buff1[200],*in,*inf;
     int i,pos;
+    expandHeader(fp1,"stdio.h");
     while(fgets(buff,200,fp))
     {
         //l=strlen(buff);
