@@ -105,6 +105,31 @@ void remCmnt(FILE *fp,FILE *fp1)
     {
         //l=strlen(buff);
         in=buff;
+        if(inf=strstr(buff,"//"))
+        {
+            pos=inf-in;
+            buff[pos]='\n';
+            buff[pos+1]='\0';
+        }
+        in=buff;
+        if(inf=strstr(buff,"/*"))
+        {
+            pos=inf-in;  
+            if(strstr(buff,"*/"));
+            else
+            while(1)
+            {   
+               if(fgets(buff1,200,fp))
+               {
+                    if(strstr(buff1,"*/"))
+                    break;
+               }
+              else
+                  break;
+            }
+            buff[pos]='\n';
+            buff[pos+1]='\0';
+        }
         if(strstr(buff,"#include")||strstr(buff,"# include")||strstr(buff,"#  include"))
         {
             char *pos,*intial;
@@ -170,31 +195,7 @@ void remCmnt(FILE *fp,FILE *fp1)
             }
             continue;
         }
-        if(inf=strstr(buff,"//"))
-        {
-            pos=inf-in;
-            buff[pos]='\n';
-            buff[pos+1]='\0';
-        }
-        in=buff;
-        if(inf=strstr(buff,"/*"))
-        {
-            pos=inf-in;  
-            if(strstr(buff,"*/"));
-            else
-            while(1)
-            {   
-               if(fgets(buff1,200,fp))
-               {
-                    if(strstr(buff1,"*/"))
-                    break;
-               }
-              else
-                  break;
-            }
-            buff[pos]='\n';
-            buff[pos+1]='\0';
-        }
+        
         fputs(buff,fp1); 
     }
     return;
