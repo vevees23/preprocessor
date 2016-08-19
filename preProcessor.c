@@ -1,36 +1,111 @@
 #include<stdio.h>
 #include<string.h>
+char te[20000];
 void expandHeader(FILE *fp1,char *p,int flag)
 {
     char dir[4][50]={"/usr/include/"},buf1[300];
-    FILE *fph;
+    FILE *fph=NULL;
+    int k=0;
+    //printf("\nsecond test2");
     strcat(dir[0],p);
+   // printf("\nsecond tesr3");
     if(flag==2)
     {
         fph=fopen(p,"r");
-    
-    if (fph==NULL)
-    {
-    fph=fopen(dir[0],"r");
     }
-    }
-    else if(flag==1)
+    if(flag==1)
     fph=fopen(dir[0],"r");
+   // printf("\nsecond test4\n");
+    if(fph==NULL)
+    return;
     while(fgets(buf1,300,fph))
     {
+        //l=strlen(buff);
+        //printf("\nsecond test5\n");
+        if(strstr(buf1,"#include")||strstr(buf1,"# include") ||strstr(buf1,"#  include"))
+        {
+           // printf("\nsecond test k\n");
+            char *pos,*intial;
+            char he[20];
+            int flag,index1,index2,i;
+            intial=buf1;
+           // printf("inloop");
+            if(pos=strchr(buf1,'<'))
+            {   
+                //printf("inloop1");
+                index1=pos-intial;
+                if(pos=strchr(buf1,'>'))
+                {
+                   // printf("inloop2\n");
+                    index2=pos-intial;
+                    flag=1;
+                    //printf("%d,%d",index1,index2);
+                    if((index1==(index2-1)))
+                    continue;
+                    for(i=0,index1++;index1<index2;index1++,i++)
+                   {
+                        he[i]=buf1[index1];
+                    }
+                    he[i]=0;
+                  // printf("%s\n",he);
+                   if(strstr(te,he))
+                   continue;
+                   strcat(te,he);
+                    expandHeader(fp1,he,flag);
+                }
+                 else{
+                        printf("\nend tag not found for hearfile\n ");
+                        return;
+                }
+                
+            }
+              else if(pos=strchr(buf1,'"'))
+            {   
+              
+                index1=pos-intial;
+                if(pos=strrchr(buf1,'"'))
+                {
+                  
+                    index2=pos-intial;
+                    flag=2;
+                    //printf("%d,%d",index1,index2);
+                    if((index1==(index2-1)))
+                    continue;
+                    for(i=0,index1++;index1<index2;index1++,i++)
+                   {
+                        he[i]=buf1[index1];
+                    }
+                    he[i]=0;
+                   // printf("%s\n",he);
+                    expandHeader(fp1,he,flag);
+                }
+                 else{
+                        printf("\nend tag not found for hearfile \n");
+                        return;
+                }
+                
+            }
+            else
+            {
+            fputs(buf1,fp1);
+            continue;
+            }
+            continue;
+        }  
         fputs(buf1,fp1);
     }
+    return;
 }
 void remCmnt(FILE *fp,FILE *fp1)
 {
     char buff[200],buff1[200],*in,*inf;
-    int i,pos;
+    int i,pos,k=0;
     //expandHeader(fp1,"stdio.h");
     while(fgets(buff,200,fp))
     {
         //l=strlen(buff);
         in=buff;
-        if(strstr(buff,"#include"))
+        if(strstr(buff,"#include")||strstr(buff,"# include")||strstr(buff,"#  include"))
         {
             char *pos,*intial;
             char he[20];
@@ -53,9 +128,13 @@ void remCmnt(FILE *fp,FILE *fp1)
                    {
                         he[i]=buff[index1];
                     }
-                    he[i]=0;
-                   // printf("%s\n",he);
+                    he[i]='\0';
+                   //printf("%s\n",he);
+                    if(strstr(te,he))
+                   continue;
+                   strcat(te,he);
                     expandHeader(fp1,he,flag);
+                   // printf("test8");
                 }
                  else{
                         printf("\nend tag not found for hearfile\n ");
@@ -80,7 +159,7 @@ void remCmnt(FILE *fp,FILE *fp1)
                         he[i]=buff[index1];
                     }
                     he[i]=0;
-                   // printf("%s\n",he);
+                  // printf("%s\n",he);
                     expandHeader(fp1,he,flag);
                 }
                  else{
@@ -139,8 +218,14 @@ main(int argc ,char **argv)
         printf("no file found\n");
         return;
     }
-    fp1=fopen(d,"w");
+    fp1=fopen("temp","w");
     remCmnt(fp,fp1);
+    fclose(fp1);
+    fclose(fp);
+    fp1=fopen(d,"w");
+    fp=fopen("temp","r");
+    remCmnt(fp,fp1);
+    remove("temp");
 
 fclose(fp1);
 fclose(fp);
