@@ -6,25 +6,30 @@ void expandHeader(FILE *fp1,char *p,int flag)
     char dir[4][50]={"/usr/include/"},buf1[300];
     FILE *fph=NULL;
     int k=0;
-    //printf("\nsecond test2");
+    while(k<2)
+                   {
+                   k++;
+                   printf("\ntest");
+                   }
+    printf("\nsecond test2");
     strcat(dir[0],p);
-   // printf("\nsecond tesr3");
+    printf("\nsecond tesr3");
     if(flag==2)
     {
         fph=fopen(p,"r");
     }
     if(flag==1)
     fph=fopen(dir[0],"r");
-   // printf("\nsecond test4\n");
+    printf("\nsecond test4\n");
     if(fph==NULL)
     return;
     while(fgets(buf1,300,fph))
     {
         //l=strlen(buff);
         //printf("\nsecond test5\n");
-        if(strstr(buf1,"#include")||strstr(buf1,"# include") ||strstr(buf1,"#  include"))
+        if(strstr(buf1,"#include")||strstr(buf1,"# include"))
         {
-           // printf("\nsecond test k\n");
+            printf("\nsecond test k\n");
             char *pos,*intial;
             char he[20];
             int flag,index1,index2,i;
@@ -47,7 +52,7 @@ void expandHeader(FILE *fp1,char *p,int flag)
                         he[i]=buf1[index1];
                     }
                     he[i]=0;
-                  // printf("%s\n",he);
+                   printf("%s\n",he);
                    if(strstr(te,he))
                    continue;
                    strcat(te,he);
@@ -105,20 +110,20 @@ void remCmnt(FILE *fp,FILE *fp1)
     {
         //l=strlen(buff);
         in=buff;
-        if(strstr(buff,"#include")||strstr(buff,"# include")||strstr(buff,"#  include"))
+        if(strstr(buff,"#include"))
         {
             char *pos,*intial;
             char he[20];
             int flag,index1,index2,i;
             intial=buff;
-           // printf("inloop");
+            printf("inloop");
             if(pos=strchr(buff,'<'))
             {   
-                //printf("inloop1");
+                printf("inloop1");
                 index1=pos-intial;
                 if(pos=strchr(buff,'>'))
                 {
-                   // printf("inloop2\n");
+                    printf("inloop2\n");
                     index2=pos-intial;
                     flag=1;
                     //printf("%d,%d",index1,index2);
@@ -129,12 +134,13 @@ void remCmnt(FILE *fp,FILE *fp1)
                         he[i]=buff[index1];
                     }
                     he[i]='\0';
-                   //printf("%s\n",he);
+                     printf("\ntest0\n");
+                   printf("%s\n",he);
                     if(strstr(te,he))
                    continue;
                    strcat(te,he);
                     expandHeader(fp1,he,flag);
-                   // printf("test8");
+                    printf("test8");
                 }
                  else{
                         printf("\nend tag not found for hearfile\n ");
@@ -159,7 +165,7 @@ void remCmnt(FILE *fp,FILE *fp1)
                         he[i]=buff[index1];
                     }
                     he[i]=0;
-                  // printf("%s\n",he);
+                   printf("%s\n",he);
                     expandHeader(fp1,he,flag);
                 }
                  else{
@@ -218,14 +224,8 @@ main(int argc ,char **argv)
         printf("no file found\n");
         return;
     }
-    fp1=fopen("temp.i","w");
-    remCmnt(fp,fp1);
-    fclose(fp1);
-    fclose(fp);
     fp1=fopen(d,"w");
-    fp=fopen("temp.i","r");
     remCmnt(fp,fp1);
-    remove("temp.i");
 
 fclose(fp1);
 fclose(fp);
