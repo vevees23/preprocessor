@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<string.h>
-char te[20000];
+char te[1000];//this string for store expander header file for later check
 void expandHeader(FILE *fp1,char *p,int flag)
 {
     char dir[4][50]={"/usr/include/"},buf1[300];
@@ -48,9 +48,9 @@ void expandHeader(FILE *fp1,char *p,int flag)
                     }
                     he[i]=0;
                   // printf("%s\n",he);
-                   if(strstr(te,he))
+                   if(strstr(te,he))//checking the header file for previous expand 
                    continue;
-                   strcat(te,he);
+                   strcat(te,he);//adding the header-name file to string
                     expandHeader(fp1,he,flag);
                 }
                  else{
@@ -188,7 +188,7 @@ void remCmnt(FILE *fp,FILE *fp1)
                     expandHeader(fp1,he,flag);
                 }
                  else{
-                        printf("\nend tag not found for hearfile \n");
+                        printf("\nend tag not found for headerfile \n");
                         return;
                 }
                 
@@ -227,6 +227,7 @@ main(int argc ,char **argv)
     fp=fopen("temp.i","r");
     remCmnt(fp,fp1);
     remove("temp.i");
+   // printf("%s",te);
 
 fclose(fp1);
 fclose(fp);
